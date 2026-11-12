@@ -284,27 +284,41 @@ document.getElementById("printBtn").onclick = function() {
   const id = document.getElementById("modalRegId").textContent;
   const list = loadRegistrations();
   const entry = list.find(r => r.id === id) || {};
-  const content = `
-    <div style="font-family:system-ui; padding:30px; max-width:480px; margin:auto; border:2px solid #dc2626; border-radius:12px;">
-      <h2 style="text-align:center; color:#dc2626; margin-bottom:4px;">75th Karbi Anglong Day 2026</h2>
-      <h3 style="text-align:center; margin-top:0;">Open Arm Wrestling</h3>
-      <h4 style="text-align:center; color:#166534; margin-top:8px;">Registration Card</h4>
-      <hr>
-      <p><strong>Registration ID:</strong> ${entry.id || id}</p>
-      <p><strong>Name:</strong> ${entry.name || ""}</p>
-      <p><strong>Phone:</strong> ${entry.phone || ""}</p>
-      <p><strong>Age:</strong> ${entry.age || ""}</p>
-      <p><strong>Gender:</strong> ${entry.gender || ""}</p>
-      <p><strong>Address:</strong> ${entry.address || "—"}</p>
-      <p><strong>Registered on:</strong> ${entry.time || ""}</p>
-      <hr>
-      <p style="font-size:0.9rem; color:#64748b; text-align:center;">Organised by Sports & Youth Welfare Department, KAAC</p>
-      <p style="font-size:0.85rem; text-align:center;">Contact: 7099012111, 9678030588</p>
-    </div>`;
-  const w = window.open("", "", "width=800,height=600");
-  w.document.write(content);
-  w.document.close();
-  w.print();
+  const content = `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Registration Card - ${entry.id || id}</title>
+<style>
+  body { font-family: system-ui, sans-serif; padding: 20px; background: #f9fafb; }
+  .card { max-width: 480px; margin: 20px auto; padding: 30px; border: 2px solid #dc2626; border-radius: 12px; background: white; }
+  h2 { text-align: center; color: #dc2626; margin-bottom: 4px; }
+  h3, h4 { text-align: center; margin-top: 0; }
+  h4 { color: #166534; }
+  hr { border: none; border-top: 1px solid #e5e7eb; margin: 12px 0; }
+  p { margin: 6px 0; }
+  .footer { font-size: 0.85rem; color: #64748b; text-align: center; margin-top: 16px; }
+</style></head><body>
+<div class="card">
+  <h2>75th Karbi Anglong Day 2026</h2>
+  <h3>Open Arm Wrestling</h3>
+  <h4>Registration Card</h4>
+  <hr>
+  <p><strong>Registration ID:</strong> ${entry.id || id}</p>
+  <p><strong>Name:</strong> ${entry.name || ""}</p>
+  <p><strong>Phone:</strong> ${entry.phone || ""}</p>
+  <p><strong>Age:</strong> ${entry.age || ""}</p>
+  <p><strong>Gender:</strong> ${entry.gender || ""}</p>
+  <p><strong>Address:</strong> ${entry.address || "—"}</p>
+  <p><strong>Registered on:</strong> ${entry.time || ""}</p>
+  <hr>
+  <p class="footer">Organised by Sports & Youth Welfare Department, KAAC</p>
+  <p class="footer">Contact: 7099012111, 9678030588</p>
+</div>
+</body></html>`;
+  const blob = new Blob([content], { type: "text/html" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `Arm_Wrestling_Registration_${entry.id || id}.html`;
+  a.click();
+  URL.revokeObjectURL(a.href);
 };
 
 document.getElementById("adminBtn").onclick = function() {
